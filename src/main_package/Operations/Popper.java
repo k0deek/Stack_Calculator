@@ -1,5 +1,5 @@
 package main_package.Operations;
-
+import main_package.Exceptions.*;
 import main_package.Context;
 import main_package.Exceptions.NotEnoughArgsException;
 
@@ -7,10 +7,10 @@ import java.util.logging.Logger;
 
 public class Popper implements Product {
     private static Logger log = Logger.getLogger(Definer.class.getName());
-    public void doWork(Context context) throws NotEnoughArgsException {
+    public void doWork(Context context) throws MainExceptions {
         String str;
 
-        if (context.getNums().empty()) throw new NotEnoughArgsException();
+        if (context.getNums().empty()) throw new NotEnoughArgsException("Popper");
 
         str = context.getNums().pop();
 

@@ -1,18 +1,17 @@
 package main_package.Operations;
-
+import main_package.Exceptions.*;
 import main_package.Context;
-import main_package.Exceptions.NotDefinedException;
 import main_package.Exceptions.NotEnoughArgsException;
 
 import java.util.logging.Logger;
 
 public class Summator implements Product {
     private static Logger log = Logger.getLogger(Definer.class.getName());
-    public void doWork(Context context) throws NotEnoughArgsException, NotDefinedException {
+    public void doWork(Context context) throws MainExceptions {
         Double first, second;
         Double sum;
 
-        if (context.getNums().size() < 2) throw new NotEnoughArgsException();
+        if (context.getNums().size() < 2) throw new NotEnoughArgsException("Summator");
         first = context.getANumber();
         second = context.getANumber();
 

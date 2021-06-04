@@ -1,5 +1,5 @@
 package main_package.Operations;
-
+import main_package.Exceptions.*;
 import main_package.Context;
 import main_package.Exceptions.NotDefinedException;
 import main_package.Exceptions.NotEnoughArgsException;
@@ -12,10 +12,10 @@ public class Substracter implements Product {
     public Substracter() {
     }
 
-    public void doWork(Context context) throws NotEnoughArgsException, NotDefinedException {
+    public void doWork(Context context) throws MainExceptions {
         Double first, second, sub;
 
-        if (context.getNums().size() < 2) throw new NotEnoughArgsException();
+        if (context.getNums().size() < 2) throw new NotEnoughArgsException("Substracter");
         first = context.getANumber();
         second = context.getANumber();
 
