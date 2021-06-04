@@ -1,7 +1,9 @@
 package main_package.Exceptions;
 
-public class NotDefinedException extends Exception {
-    public NotDefinedException(){
-        super("Not defined");
+import main_package.Main;
+
+public class NotDefinedException extends MainExceptions {
+    public NotDefinedException(String error){
+        super("Not defined: " +error);
     }
 }

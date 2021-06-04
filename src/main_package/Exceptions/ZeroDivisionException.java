@@ -1,7 +1,7 @@
 package main_package.Exceptions;
 
-public class ZeroDivisionException extends Exception {
-    public ZeroDivisionException(){
-        super("Division by zero!");
+public class ZeroDivisionException extends ComputationalException {
+    public ZeroDivisionException(String error){
+        super("Division by zero: " +error);
     }
 }
