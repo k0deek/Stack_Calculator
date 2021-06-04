@@ -1,86 +1,55 @@
 package main_package;
 
 import main_package.Creators.*;
-import main_package.Exceptions.IncorrectNumOfArgs;
-import main_package.Exceptions.NotEnoughArgsException;
 import main_package.Operations.*;
-import main_package.Context;
-
-import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.util.TreeMap;
+import java.io.*;
+import java.lang.*;
+import main_package.Exceptions.*;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 public class Parser {
-    private Context context;
-    private Scanner scanner;
-    private static Logger log = Logger.getLogger(Definer.class.getName());
-
-    public Parser(String filename) throws FileNotFoundException {
-        File file = new File(filename);
-        this.scanner = new Scanner(file);
-        this.context = new Context();
-    }
-
-    public Parser(){
-        this.scanner = new Scanner(System.in);
-        this.context = new Context();
-    }
-
-    public void doWork() throws Exception{
-        String str;
-        Creator creator;
-
-        while(this.scanner.hasNextLine()) {
-            try {
-                str = this.scanner.nextLine();
-                this.context.setSplStr(str);
-                switch (this.context.getSplStr()[0]){
-                    case "#":
-                        continue;
-                    case "SQRT":
-                        creator = new SqrtCreator();
-                        break;
-                    case "*":
-                        creator = new MulCreator();
-                        break;
-                    case "/":
-                        creator = new DivCreator();
-                        break;
-                    case "+":
-                        creator = new SumCreator();
-                        break;
-                    case "-":
-                        creator = new SubCreator();
-                        break;
-                    case "POP":
-                        creator = new PopCreator();
-                        break;
-                    case "PUSH":
-                        creator = new PushCreator();
-                        break;
-                    case "DEFINE":
-                        creator = new DefCreator();
-                        break;
-                    case "PRINT":
-                        creator = new PrintCreator();
-                        break;
-                    case "END":
-                        return;
-                    default:
-                        System.out.println("Command " + str + " not found");
-                        continue;
+    private final TreeMap<String, Class> ProductName;
+    public Parser(String configFile) {
+        ProductName = new TreeMap<>();
+        try {
+            File file = new File(configFile);
+            FileReader fileReader = new FileReader(file);
+            BufferedReader buf = new BufferedReader(fileReader);
+            String line = buf.readLine();
+            while (line != null) {
+                try {
+                    String[] separateWords;
+                    String delimeter = " ";
+                    separateWords = line.split(delimeter);
+                    ProductName.put(separateWords[0], Class.forName("main_package.Creators" + "." + separateWords[1]));
+                    line = buf.readLine();
                 }
-                Product prod = creator.create();
-                if (!prod.isCorrect(context)) throw new IncorrectNumOfArgs();
-                prod.doWork(context);
-                if (context.getSplStr()[0].equals("END")) return;
-            }
-            catch(Exception e){
-                System.out.println(e.getMessage());
-                log.log(Level.SEVERE, this.context.getSplStr()[0] + ": " + e.getMessage());
+                catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         }
+
+        catch (IOException ioErr) {
+            ioErr.printStackTrace();
+        }
+    }
+
+    public Creator makeInstruction(String Name) {
+        Creator newInst = null;
+        try {
+            newInst = (Creator) ProductName.get(Name).getDeclaredConstructor().newInstance();
+        }
+        catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException er) {
+            er.printStackTrace();
+        }
+        return newInst;
     }
 }

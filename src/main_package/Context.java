@@ -44,7 +44,7 @@ public class Context {
         try {
             str = this.getNums().pop();
         } catch (Exception e) {
-            throw new NotEnoughArgsException();
+            throw new NotEnoughArgsException("Context");
         }
 
         try {
@@ -55,7 +55,7 @@ public class Context {
             try {
                 return defines.get(str);
             } catch (Exception ee) {
-                throw new NotDefinedException();
+                throw new NotDefinedException("Context");
             }
         }
     }
